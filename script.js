@@ -1,13 +1,3 @@
-
-// Wait for the document to be fully loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', ready);
-} else {
-    ready();
-}
-
-function ready() {
-
     // ADD TO CART
     const addToCartButtons = document.querySelectorAll('.addToCartBtn');
     for (let i = 0; i < addToCartButtons.length; i++) {
@@ -33,7 +23,8 @@ function ready() {
     document.querySelector('.confirm-order').addEventListener('click', showOrderConfirmation);
 
     updateCartVisibility();
-}
+
+
 
 function handleProductIncrement(event) {
     const button = event.target;
@@ -43,8 +34,10 @@ function handleProductIncrement(event) {
     quantity++;
     quantityElement.textContent = `${quantity}`;
     updateQuantityInCart(qualityButton, quantity);
-    updateCartTotals(); // Update total immediately
+    updateCartTotals(); 
 }
+
+
 
 function handleProductDecrement(event) {
     const button = event.target;
@@ -55,9 +48,11 @@ function handleProductDecrement(event) {
         quantity--;
         quantityElement.textContent = `${quantity}`;
         updateQuantityInCart(qualityButton, quantity);
-        updateCartTotals(); // Update total immediately
+        updateCartTotals(); 
     }
 }
+
+
 
 function handleAddToCart(event) {
     const button = event.target.closest('.addToCartBtn');
@@ -97,14 +92,16 @@ function handleAddToCart(event) {
     updateCartVisibility();
     updateCartTotals();
 
-    // Show delivery and order summary
+    
     document.querySelector('.delivery').style.display = 'block';
     document.querySelector('.order-summary').style.display = 'block';
 
-    updateCartVisibility(); // Check cart visibilit
+    updateCartVisibility();
 
     qualityButton.querySelector('.quantity').textContent = '1';
 }
+
+
 
 function addNewItemToCart(title, price, quantity = 1) {
     const cartListContents = document.querySelector('.cartListContents');
@@ -126,6 +123,8 @@ function addNewItemToCart(title, price, quantity = 1) {
     newDeleteButton.addEventListener('click', removeCartItem);
 }
 
+
+
 function updateQuantityInCart(qualityButton, quantity) {
     const productItem = qualityButton.closest('.cart-Items');
     const title = productItem.querySelector('.cart-items-details p:first-child').textContent;
@@ -140,40 +139,48 @@ function updateQuantityInCart(qualityButton, quantity) {
             const price = parseFloat(priceText);
             const totalPriceElement = existingCartItem.querySelector('.total-price');
             totalPriceElement.textContent = `$${(quantity * price).toFixed(2)}`;
-            updateCartCounts(); // Update cart counts after quantity change
+            updateCartCounts();
             break;
         }
     }
 }
 
+
+
 function removeCartItem(event) {
     const button = event.target;
-    const productItem = button.closest('.cart-item'); // Get the cart item
-    productItem.remove(); // Remove the cart item from the DOM
-    updateCartCounts(); // Update cart counts
-    updateCartVisibility(); // Check cart visibility
-    updateCartTotals(); // Update totals
-
-    // Hide .qualityButton and show .addToCart button
-    const cartItemsContainer = button.closest('.cart-Items');
-    const qualityButton = cartItemsContainer.querySelector('.qualityButton');
-    const addToCartButton = cartItemsContainer.querySelector('.addToCartBtn');
-
-    if (qualityButton) {
-        qualityButton.style.display = 'none'; // Hide quality button
-    }
+    const productItem = button.closest('.cart-item'); 
+    productItem.remove();
+    updateCartCounts(); 
+    updateCartVisibility();
+    updateCartTotals(); 
     
-    if (addToCartButton) {
-        addToCartButton.style.display = 'block'; // Show add to cart button
-    }
+    const cartItemTitle = productItem.querySelector('h3').textContent;
+    const cartItemsContainers = document.querySelectorAll('.cart-Items');
 
-    // Hide .delivery and .order-summary if the cart is empty
+    cartItemsContainers.forEach((container) => {
+        const containerTitle = container.querySelector('.cart-items-details p:first-child').textContent;
+
+        if (containerTitle === cartItemTitle) {
+            const qualityButton = container.querySelector('.qualityButton');
+            const addToCartButton = container.querySelector('.addToCartBtn');
+            
+            if (qualityButton) {
+                qualityButton.style.display = 'none';
+            }
+            if (addToCartButton) {
+                addToCartButton.style.display = 'block';
+            }
+        }
+    });
+
     const cartItems = document.querySelectorAll('.cart-item');
     if (cartItems.length === 0) {
-        document.querySelector('.delivery').style.display = 'none'; // Ensure delivery is hidden
-        document.querySelector('.order-summary').style.display = 'none'; // Ensure order summary is hidden
+        document.querySelector('.delivery').style.display = 'none';
+        document.querySelector('.order-summary').style.display = 'none';
     }
 }
+
 
 
 function updateCartCounts() {
@@ -196,6 +203,8 @@ function updateCartCounts() {
     }
 }
 
+
+
 function updateCartVisibility() {
     const cartItems = document.querySelectorAll('.cart-item');
     const cartListContents = document.querySelector('.cartListContents');
@@ -206,13 +215,13 @@ function updateCartVisibility() {
     if (cartItems.length === 0) {
         emptyCart.style.display = 'block';
         cartListContents.style.display = 'none';
-        deliverySection.style.display = 'none'; // Hide delivery section
-        orderSummarySection.style.display = 'none'; // Hide order summary section
+        deliverySection.style.display = 'none'; 
+        orderSummarySection.style.display = 'none';
     } else {
         emptyCart.style.display = 'none';
         cartListContents.style.display = 'block';
-        deliverySection.style.display = 'block'; // Show delivery section
-        orderSummarySection.style.display = 'block'; // Show order summary section
+        deliverySection.style.display = 'block'; 
+        orderSummarySection.style.display = 'block';
     }
 }
 
@@ -235,7 +244,7 @@ function updateCartTotals() {
     }
 }
 
-// Function to show order confirmation
+
 function showOrderConfirmation() {
     const overlay = document.querySelector('.overlay');
     const confirmOrderContents = document.querySelector('.confirmorderContents');
@@ -282,38 +291,40 @@ function showOrderConfirmation() {
         </div>
     `;
 
-    // Show the confirm order contents and overlay
-    confirmOrderContents.style.display = 'block'; // Show the order contents
-    overlay.style.display = 'flex'; // Show the overlay
+    
+    confirmOrderContents.style.display = 'block';
+    overlay.style.display = 'flex'; 
 }
 
 
 document.addEventListener('click', function(event) {
-    // Check if the click target is not the overlay or the button
+    
     const overlay = document.querySelector('.overlay');
     const button = document.querySelector('.start-order');
 
     if (!overlay.contains(event.target) && !button.contains(event.target)) {
-        // Prevent any response if clicking outside the overlay or button
         return;
     }
 
     if (button.contains(event.target)) {
-        // Your refresh code here
         location.reload();
     }
 });
 
+
+
 // Show the overlay and block interaction on the page when .confirm-order is clicked
 document.querySelector('.confirm-order').addEventListener('click', function(e) {
-    document.querySelector('.overlay').style.display = 'block'; // Show overlay
-    document.body.style.pointerEvents = 'none'; // Block interaction with the page
-    document.querySelector('.start-order').style.pointerEvents = 'auto'; // Enable start-order button
+    document.querySelector('.overlay').style.display = 'block'; 
+    document.body.style.pointerEvents = 'none'; 
+    document.querySelector('.start-order').style.pointerEvents = 'auto'; 
 });
+
+
 
 // Handle the start-order click and hide the overlay
 document.querySelector('.start-order').addEventListener('click', function(e) {
-    document.querySelector('.overlay').style.display = 'none'; // Hide overlay
-    document.body.style.pointerEvents = 'auto'; // Re-enable interaction with the page
+    document.querySelector('.overlay').style.display = 'none'; 
+    document.body.style.pointerEvents = 'auto'; 
 });
 

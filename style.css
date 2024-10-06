@@ -348,8 +348,6 @@ body {
 }
 
 
-
-
 @media (max-width: 1024px) and (min-width: 768px){
     .cart-Items {
         /* width: 50%; */
@@ -363,6 +361,7 @@ body {
         margin: 0px auto; 
         padding: 6px 24px;
     }
+    
 }
 
  
